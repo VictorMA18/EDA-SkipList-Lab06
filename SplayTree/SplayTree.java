@@ -149,29 +149,29 @@ public class SplayTree<T extends Comparable<T>> {
   private void addNodesAndEdges(Graph graph, SplayNode<T> node) {
     if (node == null) return;
 
-    if (graph.getNode(node.key.toString()) == null)
-      graph.addNode(node.key.toString());
+    addNode(graph, node.key.toString());
 
     if (node.left != null) {
-      if (graph.getNode(node.left.key.toString()) == null)
-        graph.addNode(node.left.key.toString());
-
-      if (graph.getEdge(node.key.toString() + "-" + node.left.key.toString()) == null)
-        graph.addEdge(node.key.toString() + "-" + node.left.key.toString(),
-                      node.key.toString(), node.left.key.toString(), true);
-
+      addNode(graph, node.left.key.toString());
+      addEdge(graph, node.key.toString(), node.left.key.toString());
       addNodesAndEdges(graph, node.left);
     }
 
     if (node.right != null) {
-      if (graph.getNode(node.right.key.toString()) == null)
-        graph.addNode(node.right.key.toString());
-
-      if (graph.getEdge(node.key.toString() + "-" + node.right.key.toString()) == null)
-        graph.addEdge(node.key.toString() + "-" + node.right.key.toString(),
-                      node.key.toString(), node.right.key.toString(), true);
-
+      addNode(graph, node.right.key.toString());
+      addEdge(graph, node.key.toString(), node.right.key.toString());
       addNodesAndEdges(graph, node.right);
     }
+  }
+
+  private void addNode(Graph graph, String key) {
+    if (graph.getNode(key) == null)
+      graph.addNode(key);
+  }
+
+  private void addEdge(Graph graph, String parentKey, String childKey) {
+    String edgeId = parentKey + "-" + childKey;
+    if (graph.getEdge(edgeId) == null)
+      graph.addEdge(edgeId, parentKey, childKey, true);
   }
 }
