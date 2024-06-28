@@ -15,26 +15,15 @@ La `Skip List` es una estructura de datos probabilística que permite operacione
 
 > **Compilación**: Usa el siguiente comando para compilar el archivo `SkipList.java`.
 
-    ```sh
-    javac SkipList.java
-    ```
+```sh
+javac SkipList.java
+```
 
 > **Ejecución**: Ejecuta el archivo compilado.
 
-    ```sh
-    java SkipList
-    ```
-
-> **Uso del Método `printList`**: Para visualizar la estructura de la `Skip List`, llama al método `printList` dentro del `main`.
-
-    ```java
-    SkipList<Integer> skipList = new SkipList<>();
-    skipList.add(3);
-    skipList.add(6);
-    skipList.add(7);
-    skipList.add(9);
-    skipList.printList();
-    ```
+```sh
+java SkipList
+```
 
 ## <samp>Splay Tree</samp>
 
@@ -50,14 +39,14 @@ El `Splay Tree` es una estructura de datos autoajustable que realiza operaciones
 
 > **Compilación**: Usa el siguiente comando para compilar los archivos `SplayTree.java` y `TestSplayTree.java`.
 
-    ```sh
-    javac -cp .:jar/gs-algo-2.0.jar:jar/gs-core-2.0.jar:jar/gs-ui-swing-2.0.jar TestSplayTree.java
-    ```
+```sh
+javac -cp .:jar/gs-algo-2.0.jar:jar/gs-core-2.0.jar:jar/gs-ui-swing-2.0.jar TestSplayTree.java
+```
 
 > **Ejecución**: Ejecuta el archivo compilado.
 
-    ```sh
-    java -cp .:jar/gs-algo-2.0.jar:jar/gs-core-2.0.jar:jar/gs-ui-swing-2.0.jar TestSplayTree
-    ```
+```sh
+java -cp .:jar/gs-algo-2.0.jar:jar/gs-core-2.0.jar:jar/gs-ui-swing-2.0.jar TestSplayTree
+```
 
 > :warning: **Visualización**: Asegúrate de tener la biblioteca `GraphStream` en tu CLASSPATH para ver la representación gráfica del `Splay Tree`.
