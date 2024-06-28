@@ -21,6 +21,7 @@
   frame=lines,
   fontsize=\normalsize
 }
+\newcommand{\mj}[1]{\mintinline[style=gruvbox-light]{java}{#1}}
 
 % Define background color
 \definecolor{background}{HTML}{2E3440}
@@ -44,7 +45,7 @@
 \lhead{\raisebox{-0.2\height}{\includegraphics[width=4cm]{img/logo_unsa.png}}}
 \chead{\fontsize{8}{8}\selectfont \university \\ \faculty \\ \textbf{\program}}
 \rhead{\raisebox{-0.2\height}{\includegraphics[width=3.5cm]{img/logo_episunsa.png}}}
-\lfoot{Estudiante \student}
+\lfoot{Semestre \semester}
 \cfoot{}
 \rfoot{Pág. \thepage}
 
@@ -58,7 +59,7 @@
   \vfill \vfill
   {\textbf{Profesor(a):} \par}
 	\professor \vfill
-  {\textbf{Estudiante:} \par}
+  {\textbf{Estudiantes:} \par}
 	\students \vfill
 	{\large \mydate \par}
 \end{titlepage}
