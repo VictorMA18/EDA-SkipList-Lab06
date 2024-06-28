@@ -12,12 +12,6 @@ public class TestSkipList {
     skipList.add(21);
     skipList.add(25);
 
-    System.out.println("Skip List contains 19: " + skipList.contains(19));
-    System.out.println("Skip List contains 15: " + skipList.contains(15));
-
-    skipList.remove(19);
-    System.out.println("Skip List contains 19 after removal: " + skipList.contains(19));
-
     skipList.printList();
   }
 }

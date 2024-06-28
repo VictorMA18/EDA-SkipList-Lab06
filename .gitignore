@@ -1,0 +1,10 @@
+*.class
+*.aux
+*.log
+*.out
+*.toc
+*.pyg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+_minted-Eda_lab06_report

@@ -3,7 +3,7 @@ import java.util.NoSuchElementException;
 import java.util.Random;
 
 public class SkipList<T extends Comparable<? super T>> implements Iterable<T> {
-  private static final int MAX_LEVEL = 16; 
+  private static final int MAX_LEVEL = 4; 
   private final SkipListNode<T> head = new SkipListNode<>(null, MAX_LEVEL);
   private final Random random = new Random();
   private int level = 0;
@@ -110,7 +110,7 @@ public class SkipList<T extends Comparable<? super T>> implements Iterable<T> {
   public void printList() {
     System.out.println("SkipList:");
 
-    for (int i = level; i >= 0; i--) {
+    for (int i = MAX_LEVEL; i >= 0; i--) {
       SkipListNode current = head.forward[i];
       System.out.print("Level " + i + ": ");
 
