@@ -1,11 +1,15 @@
 public class TestSplayTree {
-    public static void main(String[] args) {
-        SplayTree splayTree = new SplayTree();
-        Node root = null;
-        root = splayTree.insert(root, 2);
-        root = splayTree.insert(root, 1);
-        root = splayTree.insert(root, 3);
-        System.out.println("Preorder traversal of the modified Splay tree:");
-        splayTree.preOrder(root);
-    }
+  public static void main(String[] args) {
+    SplayTree<Integer> splayTree = new SplayTree<>();
+    splayTree.insert(10);
+    splayTree.insert(20);
+    splayTree.insert(30);
+    splayTree.insert(40);
+    splayTree.insert(50);
+    splayTree.insert(25);
+
+    splayTree.inorderTraversal();
+
+    splayTree.displayTree();
+  }
 }

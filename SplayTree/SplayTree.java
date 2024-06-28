@@ -1,110 +1,177 @@
-import java.util.ArrayList;
-import java.util.List;
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.SingleGraph;
 
-class Node {
-    public int key;
-    public Node left, right;
-}
+public class SplayTree<T extends Comparable<T>> {
+  private static class SplayNode<T> {
+    T key;
+    SplayNode<T> left, right;
 
-class SplayTree {
-    public Node newNode(int key) {
-        Node node = new Node();
-        node.key = key;
-        node.left = node.right = null;
-        return node;
+    SplayNode(T key) {
+      this.key = key;
+      this.left = this.right = null;
     }
+  }
 
-    public Node rightRotate(Node x) {
-        Node y = x.left;
-        x.left = y.right;
-        y.right = x;
-        return y;
+  private SplayNode<T> root;
+
+  public void insert(T key) {
+    root = insert(root, key);
+    splay(key);
+  }
+
+  private SplayNode<T> insert(SplayNode<T> node, T key) {
+    if (node == null) {
+      return new SplayNode<>(key);
     }
-
-    public Node leftRotate(Node x) {
-        Node y = x.right;
-        x.right = y.left;
-        y.left = x;
-        return y;
+    int cmp = key.compareTo(node.key);
+    if (cmp < 0) {
+      node.left = insert(node.left, key);
+    } else if (cmp > 0) {
+      node.right = insert(node.right, key);
     }
+    return node;
+  }
 
-    public Node splay(Node root, int key) {
-        if (root == null || root.key == key)
-            return root;
+  public void delete(T key) {
+    if (root == null) return;
+    root = splay(root, key);
+    if (key.compareTo(root.key) != 0) return;
 
-        if (root.key > key) {
-            if (root.left == null)
-                return root;
-            if (root.left.key > key) {
-                root.left.left = splay(root.left.left, key);
-                root = rightRotate(root);
-            }
-            else if (root.left.key < key) {
-                root.left.right = splay(root.left.right, key);
-                if (root.left.right != null)
-                    root.left = leftRotate(root.left);
-            }
-            return (root.left == null) ? root : rightRotate(root);
+    if (root.left == null) {
+      root = root.right;
+    } else {
+      SplayNode<T> temp = root;
+      root = splay(root.left, key);
+      root.right = temp.right;
+    }
+  }
+
+  public boolean contains(T key) {
+    root = splay(root, key);
+    return root != null && root.key.compareTo(key) == 0;
+  }
+
+  public void splay(T key) {
+    root = splay(root, key);
+  }
+
+  private SplayNode<T> splay(SplayNode<T> node, T key) {
+    if (node == null) return null;
+
+    int cmp1 = key.compareTo(node.key);
+    if (cmp1 < 0) {
+      if (node.left == null) return node;
+      int cmp2 = key.compareTo(node.left.key);
+      if (cmp2 < 0) {
+        node.left.left = splay(node.left.left, key);
+        node = rotateRight(node);
+      } else if (cmp2 > 0) {
+        node.left.right = splay(node.left.right, key);
+        if (node.left.right != null) {
+          node.left = rotateLeft(node.left);
         }
-        else {
-            if (root.right == null)
-                return root;
-            if (root.right.key > key) {
-                root.right.left = splay(root.right.left, key);
-                if (root.right.left != null)
-                    root.right = rightRotate(root.right);
-            }
-            else if (root.right.key < key) {
-                root.right.right = splay(root.right.right, key);
-                root = leftRotate(root);
-            }
-            return (root.right == null) ? root : leftRotate(root);
+      }
+      return node.left == null ? node : rotateRight(node);
+    } else if (cmp1 > 0) {
+      if (node.right == null) return node;
+      int cmp2 = key.compareTo(node.right.key);
+      if (cmp2 < 0) {
+        node.right.left = splay(node.right.left, key);
+        if (node.right.left != null) {
+          node.right = rotateRight(node.right);
         }
+      } else if (cmp2 > 0) {
+        node.right.right = splay(node.right.right, key);
+        node = rotateLeft(node);
+      }
+      return node.right == null ? node : rotateLeft(node);
+    } else {
+      return node;
+    }
+  }
+
+  private SplayNode<T> rotateRight(SplayNode<T> node) {
+    SplayNode<T> temp = node.left;
+    node.left = temp.right;
+    temp.right = node;
+    return temp;
+  }
+
+  private SplayNode<T> rotateLeft(SplayNode<T> node) {
+    SplayNode<T> temp = node.right;
+    node.right = temp.left;
+    temp.left = node;
+    return temp;
+  }
+
+  public void inorderTraversal() {
+    inorderTraversal(root);
+    System.out.println();
+  }
+
+  private void inorderTraversal(SplayNode<T> node) {
+    if (node != null) {
+      inorderTraversal(node.left);
+      System.out.print(node.key + " ");
+      inorderTraversal(node.right);
+    }
+  }
+
+  // Métodos y campos para visualizar el arbol
+  private static String styleSheet =
+		"node {"+
+			"	shape: circle;"+
+			"	size: 40px;"+
+			" text-size: 12;"+
+			"	fill-mode: plain;"+
+			"	fill-color: skyblue;"+
+			"	stroke-mode: plain;"+
+			"	stroke-color: black;"+
+			"	stroke-width: 1px;"+
+		"}"+
+		"edge { arrow-shape: arrow; arrow-size: 20px, 4px; }"+
+		"node.root { fill-color: yellow; }";
+	
+  public void displayTree() {
+    System.setProperty("org.graphstream.ui", "swing");
+    Graph graph = new SingleGraph("Splay Tree");
+
+    addNodesAndEdges(graph, root);
+
+    for (Node node : graph)
+      node.setAttribute("ui.label", node.getId());
+
+		graph.setAttribute("ui.stylesheet", styleSheet);
+    graph.display();
+  }
+
+  private void addNodesAndEdges(Graph graph, SplayNode<T> node) {
+    if (node == null) return;
+
+    if (graph.getNode(node.key.toString()) == null)
+      graph.addNode(node.key.toString());
+
+    if (node.left != null) {
+      if (graph.getNode(node.left.key.toString()) == null)
+        graph.addNode(node.left.key.toString());
+
+      if (graph.getEdge(node.key.toString() + "-" + node.left.key.toString()) == null)
+        graph.addEdge(node.key.toString() + "-" + node.left.key.toString(),
+                      node.key.toString(), node.left.key.toString(), true);
+
+      addNodesAndEdges(graph, node.left);
     }
 
-    public Node insert(Node root, int key) {
-        if (root == null)
-            return newNode(key);
+    if (node.right != null) {
+      if (graph.getNode(node.right.key.toString()) == null)
+        graph.addNode(node.right.key.toString());
 
-        root = splay(root, key);
+      if (graph.getEdge(node.key.toString() + "-" + node.right.key.toString()) == null)
+        graph.addEdge(node.key.toString() + "-" + node.right.key.toString(),
+                      node.key.toString(), node.right.key.toString(), true);
 
-        if (root.key == key)
-            return root;
-
-        Node node = newNode(key);
-        if (root.key > key) {
-            node.right = root;
-            node.left = root.left;
-            root.left = null;
-        }
-        else {
-            node.left = root;
-            node.right = root.right;
-            root.right = null;
-        }
-        return node;
+      addNodesAndEdges(graph, node.right);
     }
-
-    public void preOrder(Node node) {
-        if (node != null) {
-            System.out.print("\n" + node.key + " ");
-            System.out.println();
-            preOrder(node.left);
-            preOrder(node.right);
-        }
-    }
-
-    public List<Node> getNodes(Node node) {
-        List<Node> nodes = new ArrayList<>();
-        preOrderGetNodes(node, nodes);
-        return nodes;
-    }
-
-    public void preOrderGetNodes(Node node, List<Node> nodes) {
-        if (node != null) {
-            nodes.add(node);
-            preOrderGetNodes(node.left, nodes);
-            preOrderGetNodes(node.right, nodes);
-        }
-    }
+  }
 }
